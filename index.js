@@ -68,14 +68,35 @@ async function run() {
         const users = await cursor.toArray();
         res.send(users);
     })
-    
+
     app.post('/user', async (req, res) => {
         const user = req.body;
         const result = await serviceCollection.insertOne(user)
         console.log(result);
         user._id = result.insertedId
         res.send(user)
-    })
+    });
+
+
+    app.get('/clientEmail', async(req, res)=>{
+        let query = req.query.email
+        if(req.query.email){
+            query = {email: req.query.email }
+
+        }
+        const cursor =  reviewCollection.find(query)
+        const result = await cursor.toArray()
+        res.send(result)
+    });
+
+
+    // for delete
+    app.delete('/reviews/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await reviewCollection.deleteOne(query);
+        res.send(result);
+     })
   
 
     }
