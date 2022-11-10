@@ -68,7 +68,14 @@ async function run() {
         const users = await cursor.toArray();
         res.send(users);
     })
-
+    
+    app.post('/user', async (req, res) => {
+        const user = req.body;
+        const result = await serviceCollection.insertOne(user)
+        console.log(result);
+        user._id = result.insertedId
+        res.send(user)
+    })
   
 
     }
